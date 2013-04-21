@@ -1,5 +1,5 @@
 {
-	"name": "docpad-plugin-as-supply",
+	"name": "docpad-plugin-scratch",
 	"version": "2.0.0",
 	"description": "DocPad plugin that adds the ability to render Something to Something Else",
 	"homepage": "https://github.com/yourgithubusername/docpad-plugin-yourpluginname",
@@ -27,5 +27,5 @@
 		"node": ">=0.8",
 		"docpad": ">=6"
 	},
-	"main": "./src/as-supply.plugin.coffee"
+	"main": "./src/scratch.plugin.coffee"
 }
