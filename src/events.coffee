@@ -104,6 +104,58 @@ module.exports = class EventsPackageManager
 			else
 				return []
 
+		DocumentModel::getEventImportsForTypes = (types) ->
+			imports = {}
+			for type in types
+				for event of eventTypes
+					for typ in eventTypes[event].types
+
+						if typ == type
+							imports[ eventTypes[event].eventAbsName ] = true
+							break
+
+			results = []
+			results.push imp for imp of imports
+			return results
+
+		#Returns a list of static members for an event. e.g. Event.RESIZE
+		DocumentModel::getStaticPropsForTypes = (types) ->
+			names = []
+			for type in types
+				found = false
+				for event of eventTypes
+					for typ in eventTypes[event].types
+						if typ == type
+							found = true
+							names.push event + "." + plugin.convertTypeToStaticPropertyName(type)
+							break
+					if found
+						break
+
+			return names
+
+		DocumentModel::getEventHandlerNamesForTypes = (types) ->
+			results = []
+			for type in types
+				results.push plugin.convertTypeEventHandlerName(type)
+
+			return results
+
+		DocumentModel::getEventClassNamesForTypes = (types) ->
+			names = []
+			for type in types
+				found = false
+				for event of eventTypes
+					for typ in eventTypes[event].types
+						if typ == type
+							found = true
+							names.push event
+							break
+					if found
+						break
+
+			return names
+
 	###
 	> CALLED FOR EACH PACKAGE ADDED
 	###
@@ -134,6 +186,9 @@ module.exports = class EventsPackageManager
 				propName += char.toUpperCase()
 
 		return propName
+
+	convertTypeEventHandlerName:(type)->
+		return "on" + type.charAt(0).toUpperCase() + type.slice(1)
 
 
 

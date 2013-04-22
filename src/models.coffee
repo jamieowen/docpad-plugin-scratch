@@ -53,16 +53,16 @@ module.exports = class ModelPackageManager
 		DocumentModel::getImportsForModelClass = (modelDocument) ->
 			if modelDocument.isModel
 				types = {}
-				for field of modelDocument.classData
-					typeImport = fieldTypes[ modelDocument.classData[field] ]
+				for field of modelDocument.classData.fields
+					typeImport = fieldTypes[ modelDocument.classData.fields[field] ]
 					if typeof(typeImport) == "function"
-						typeImport = typeImport( modelDocument.classData[field] )
+						typeImport = typeImport( modelDocument.classData.fields[field] )
 
 					if typeof(typeImport) == "string" and typeImport.length > 0 and typeImport != modelDocument.classAbsName
 						types[ typeImport ] = true
 
 					else if not typeImport and typeof(typeImport) != "string"
-						docpad.log "An unrecognised type was specified in Model[#{modelDocument.className}], Field(#{field}), Type(#{modelDocument.classData[field]})"
+						docpad.log "An unrecognised type was specified in Model[#{modelDocument.className}], Field(#{field}), Type(#{modelDocument.classData.fields[field]})"
 					# else, this would be a native type.
 
 				results = []

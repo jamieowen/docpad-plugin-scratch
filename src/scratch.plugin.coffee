@@ -29,7 +29,7 @@ module.exports = (BasePlugin) ->
 			pmEvents = require("./events")
 			pmMediators = require("./mediators")
 			pmViews = require("./views")
-			pmControls = require("./uicontrols")
+			pmControls = require("./controls")
 
 			@registerPackageManager new pmMain()
 			@registerPackageManager new pmContextConfig()
@@ -110,6 +110,21 @@ module.exports = (BasePlugin) ->
 						fsUtil.mkdirSync( folderPath )
 
 			###
+			> PASS CONTROL TO PACKAGE MANAGERS FOR ADDITIONAL SETUP AND FORMATTING OF METADATA
+			###
+
+			#
+			# DOC READY
+			for pm in @packageManagers
+				pm.docpadReady(opts)
+
+			#
+			# PACKAGE ADDED
+			for pm in @packageManagers
+				for pkg in @packages
+					pm.packageAdded(pkg.pkgProps,pkg.pkgClasses)
+
+			###
 			> GENERATE DOCPAD DOCUMENTS WITH META DATA
 			###
 			yamlUtil = require("yamljs")
@@ -127,20 +142,7 @@ module.exports = (BasePlugin) ->
 
 					fsUtil.writeFileSync(fileWritePath,meta)
 
-			###
-			> PASS CONTROL TO PACKAGE MANAGERS FOR ADDITIONAL SETUP.
-			###
 
-			#
-			# DOC READY
-			for pm in @packageManagers
-				pm.docpadReady(opts)
-
-			#
-			# PACKAGE ADDED
-			for pm in @packageManagers
-				for pkg in @packages
-					pm.packageAdded(pkg.pkgProps,pkg.pkgClasses)
 
 			next()
 			return

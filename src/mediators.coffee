@@ -24,7 +24,11 @@ module.exports = class MediatorsPackageManager
 	###
 
 	packageAdded:(pkgProps,classes)->
-		c = classes
+		if pkgProps.isMediator
+			# split string into array for all class handlers
+			for cls in classes
+				cls.classData.handlers = cls.classData.handlers.split(",")
+
 
 
 
